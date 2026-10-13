@@ -1,9 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
 
 test('invalid password shows an error message', async ({ page }) => {
-  await page.goto('http://localhost:8080/parabank/index.htm');
-  await page.locator('input[name="username"]').fill('john');
-  await page.locator('input[name="password"]').fill('qwerty');
-  await page.getByRole('button', { name: 'Log In' }).click();
+  const loginPage = new LoginPage(page);
+
+  await loginPage.goto();
+  await loginPage.login('john','qwerty');
+
   await expect(page.getByText('The username and password could not be verified.')).toBeVisible();
 });

@@ -1,13 +1,15 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { AccountsOverviewPage } from '../pages/AccountsOverviewPage';
 
 test('valid user can log in and see accounts overview', async ({ page }) => {
-  await page.goto('http://localhost:8080/parabank/index.htm');
+  const loginPage = new LoginPage(page);
+  const accountsOverviewPage = new AccountsOverviewPage(page);
 
-  await page.locator('input[name="username"]').fill('john');
-  await page.locator('input[name="password"]').fill('demo');
-  await page.getByRole('button', { name: 'Log In' }).click();
+  await loginPage.goto();
+  await loginPage.login('john','demo');
 
-  await expect(page.getByRole('link', { name: 'Log Out' })).toBeVisible();
+  await expect(accountsOverviewPage.logOutLink).toBeVisible();
 
   await page.getByRole('link', { name: 'Accounts Overview' }).click();
 });
